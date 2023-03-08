@@ -1,8 +1,6 @@
 package entities
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -14,6 +12,6 @@ type User struct {
 	Blogs     []Blog    `gorm:"foreignKey:UserID" json:"blogs,omitempty"`
 	Likes     []Like    `gorm:"foreignKey:UserID" json:"likes,omitempty"`
 	Comments  []Comment `gorm:"foreignKey:UserID" json:"comments,omitempty"`
-	CreatedAt time.Time `gorm:"type:timestamp with time zone" json:"created_at"`
-	UpdatedAt time.Time `gorm:"type:timestamp with time zone" json:"updated_at"`
+
+	Timestamp
 }
