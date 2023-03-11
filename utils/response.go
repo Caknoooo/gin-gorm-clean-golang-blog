@@ -7,11 +7,13 @@ type Response struct {
 	Data    any    `json:"data"`
 }
 
-func BuildResponseSuccess(status bool, message string, data any) Response {
+type EmptyObj struct{}
+
+func BuildResponseSuccess(message string, data any) Response {
 	res := Response{
-		Status:  status,
+		Status:  true,
 		Message: message,
-		Error:   nil,
+		Error:   "Success",
 		Data:    data,
 	}
 	return res
@@ -21,7 +23,7 @@ func BuildResponseFailed(message string, err string, data any) Response {
 	res := Response{
 		Status: false,
 		Message: message,
-		Error: nil,
+		Error: err,
 		Data: data,
 	}
 	return res
