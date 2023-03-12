@@ -29,7 +29,7 @@ func NewUserRepository(db *gorm.DB) UserRepository{
 
 func (db *userConnection) RegisterUser(ctx context.Context, user entities.User) (entities.User, error){
 	if tx := db.connection.Create(&user).Error; tx != nil {
-		return entities.User{}, tx
+		return entities.User{}, tx 
 	}
 	return user, nil
 }
@@ -53,7 +53,7 @@ func (db *userConnection) GetUserByID(ctx context.Context, userID uuid.UUID) (en
 func (db *userConnection) GetUserByEmail(ctx context.Context, email string) (entities.User, error){
 	var user entities.User
 	if tx := db.connection.Where("email = ?", email).Take(&user).Error; tx != nil {
-		return user, tx
+		return entities.User{}, tx
 	}
 	return user, nil
 }

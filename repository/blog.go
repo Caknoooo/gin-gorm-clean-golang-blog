@@ -61,7 +61,7 @@ func (bc *blogConnection) CreateBlog(ctx context.Context, blog entities.Blog) (e
 	if err != nil {
 		return entities.Blog{}, err
 	}
-	blog.User = user
+	blog.User = user // responsenya 
 	return blog, nil
 }
 
@@ -84,6 +84,7 @@ func (bc *blogConnection) LikeBlogByBlogID(ctx context.Context, userID uuid.UUID
 	if tx := bc.connection.Where("id = ?", blogID).Find(&blog).Error; tx != nil {
 		return tx
 	}
+	
 	blog.LikeCount++
 	bc.UpdateBlog(ctx, blog)
 

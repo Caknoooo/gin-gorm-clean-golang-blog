@@ -34,11 +34,11 @@ func NewUserController(us services.UserService, jwt services.JWTService) UserCon
 func (uc *userController) RegisterUser(ctx *gin.Context) {
 	var user dto.UserCreateDTO
 	if err := ctx.ShouldBind(&user); err != nil {
-		panic(err)
+		panic(err) // harus diperbaiki
 	}
 
 	if checkUser, _ := uc.userService.CheckUser(ctx.Request.Context(), user.Email); checkUser {
-		res := utils.BuildResponseFailed("User Sudah Terdaftar", "Failed", utils.EmptyObj{})
+		res := utils.BuildResponseFailed("Email Sudah Terdaftar", "Failed", utils.EmptyObj{})
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}

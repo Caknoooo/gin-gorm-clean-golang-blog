@@ -11,12 +11,15 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// if err := godotenv.Load(".env"); err != nil {
-	// 	panic(err)
-	// }
+	if os.Getenv("APP_ENV") != "Production" {
+		if err := godotenv.Load(".env"); err != nil {
+			panic(err)
+		}
+	}
 
 	var (
 		db                *gorm.DB                     = config.SetUpDatabaseConnection()
@@ -37,7 +40,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8888"
 	}
 	server.Run(":" + port)
 }
