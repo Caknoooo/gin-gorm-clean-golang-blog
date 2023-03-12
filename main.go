@@ -20,15 +20,21 @@ func main() {
 	}
 
 	var (
-		db             *gorm.DB                  = config.SetUpDatabaseConnection()
-		jwtService     services.JWTService       = services.NewJWTService()
-		userRepository repository.UserRepository = repository.NewUserRepository(db)
-		userService    services.UserService      = services.NewUserService(userRepository)
-		userController controller.UserController = controller.NewUserController(userService, jwtService)
+		db                *gorm.DB                     = config.SetUpDatabaseConnection()
+		jwtService        services.JWTService          = services.NewJWTService()
+		userRepository    repository.UserRepository    = repository.NewUserRepository(db)
+		userService       services.UserService         = services.NewUserService(userRepository)
+		userController    controller.UserController    = controller.NewUserController(userService, jwtService)
+		blogRepository    repository.BlogRepository    = repository.NewBlogRepository(db, userRepository)
+		blogService       services.BlogService         = services.NewBlogService(blogRepository)
+		blogController    controller.BlogController    = controller.NewBlogController(blogService, jwtService)
+		commentRepository repository.CommentRepository = repository.NewCommentRepository(db, userRepository)
+		commentService    services.CommentService      = services.NewCommentService(commentRepository)
+		commentController controller.CommentController = controller.NewCommentController(commentService, jwtService)
 	)
 
 	server := gin.Default()
-	routes.Router(server, userController, jwtService)
+	routes.Router(server, userController, blogController, commentController, jwtService)
 
 	port := os.Getenv("PORT")
 	if port == "" {
