@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Caknoooo/Golang-BLOG/dto"
@@ -33,7 +32,6 @@ func NewUserController(us services.UserService, jwt services.JWTService) UserCon
 }
 
 func (uc *userController) RegisterUser(ctx *gin.Context) {
-	fmt.Println("test")
 	var user dto.UserCreateDTO
 	if err := ctx.ShouldBind(&user); err != nil {
 		panic(err)
@@ -71,14 +69,14 @@ func (uc *userController) MeUser(ctx *gin.Context) {
 	userID, err := uc.jwtService.GetUserIDByToken(token)
 	if err != nil {
 		res := utils.BuildResponseFailed("Gagal Memproses Request", "Token Tidak Valid", nil)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
 		return
 	}
 
 	result, err := uc.userService.GetUserByID(ctx.Request.Context(), userID)
 	if err != nil {
 		res := utils.BuildResponseFailed("Gagal Mendapatkan User", err.Error(), utils.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
+		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
@@ -135,7 +133,7 @@ func (uc *userController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess("Berhasil Update User", utils.EmptyObj{})
+	res := utils.BuildResponseSuccess("Berhasil Update User", userDTO)
 	ctx.JSON(http.StatusOK, res)
 }
 
